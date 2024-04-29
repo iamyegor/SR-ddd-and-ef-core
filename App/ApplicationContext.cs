@@ -30,7 +30,7 @@ namespace App
                     .AddConsole();
             });
 
-            optionsBuilder.UseSqlServer(_connectionString);
+            optionsBuilder.UseSqlServer(_connectionString).UseLazyLoadingProxies();
 
             if (_useConsoleLogger)
             {
