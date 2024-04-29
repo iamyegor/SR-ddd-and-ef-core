@@ -5,8 +5,6 @@ string connectionString = GetConnectionString();
 
 using (var context = new ApplicationContext(connectionString, true))
 {
-    //Student student = context.Students.Find(1L);
-
     Student? student = context.Students.SingleOrDefault(x => x.Id == 1);
 }
 
