@@ -2,20 +2,22 @@
 
 public class Student : Entity
 {
-    public string Name { get; }
-    public string Email { get; }
-    public virtual Course FavoriteCourse { get; }
-
-    private readonly List<Enrollment> _enrollments = new List<Enrollment>();
+    public string Name { get; set; }
+    public Email Email { get; set; }
+    public virtual Course FavoriteCourse { get; set; }
     public virtual IReadOnlyList<Enrollment> Enrollments => _enrollments.ToList();
+    private readonly List<Enrollment> _enrollments = new List<Enrollment>();
 
     protected Student() { }
 
-    public Student(string name, string email, Course favoriteCourse)
+    public Student(string name, Email email, Course favoriteCourse, Grade favoriteCourseGrade)
+        : this()
     {
         Name = name;
         Email = email;
         FavoriteCourse = favoriteCourse;
+
+        EnrollIn(favoriteCourse, favoriteCourseGrade);
     }
 
     public string EnrollIn(Course course, Grade grade)
@@ -31,7 +33,7 @@ public class Student : Entity
 
     public void Disenroll(Course course)
     {
-        Enrollment enrollment = _enrollments.FirstOrDefault(x => x.Course == course);
+        Enrollment? enrollment = _enrollments.FirstOrDefault(x => x.Course == course);
 
         if (enrollment == null)
             return;

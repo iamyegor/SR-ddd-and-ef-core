@@ -1,4 +1,6 @@
-﻿namespace App;
+﻿using XResults;
+
+namespace App;
 
 public sealed class StudentController
 {
@@ -52,6 +54,57 @@ public sealed class StudentController
             return "Course not found";
 
         student.Disenroll(course);
+
+        _context.SaveChanges();
+
+        return "OK";
+    }
+
+    public string? RegisterStudent(
+        string name,
+        string email,
+        long favoriteCourseId,
+        Grade favoriteCourseGrade
+    )
+    {
+        Course? favoriteCourse = Course.FromId(favoriteCourseId);
+        if (favoriteCourse == null)
+            return "Course not found";
+
+        Result<Email> result = Email.Create(email);
+        if (result.IsFailure)
+            return result.ErrorMessage;
+
+        var student = new Student(name, result.Value, favoriteCourse, favoriteCourseGrade);
+        _repository.Save(student);
+
+        _context.SaveChanges();
+
+        return "OK";
+    }
+
+    public string? EditPersonalInfo(
+        long studentId,
+        string name,
+        string email,
+        long favoriteCourseId
+    )
+    {
+        Student? student = _repository.GetById(studentId);
+        if (student == null)
+            return "Student not found";
+
+        Course? favoriteCourse = Course.FromId(favoriteCourseId);
+        if (favoriteCourse == null)
+            return "Course not found";
+
+        Result<Email> result = Email.Create(email);
+        if (result.IsFailure)
+            return result.ErrorMessage;
+
+        student.Name = name;
+        student.Email = result.Value;
+        student.FavoriteCourse = favoriteCourse;
 
         _context.SaveChanges();
 

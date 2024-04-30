@@ -20,4 +20,9 @@ public class StudentRepository
 
         return student;
     }
+    
+    public void Save(Student student)
+    {
+        _context.Students.Attach(student);
+    }
 }
