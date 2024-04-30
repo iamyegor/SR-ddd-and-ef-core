@@ -51,7 +51,14 @@ public sealed class SchoolContext : DbContext
                     emailBuilder.Property(e => e.Value).HasColumnName("email");
                 }
             );
-            x.Property(p => p.Name);
+            x.OwnsOne(
+                p => p.Name,
+                p =>
+                {
+                    p.Property(pp => pp.First).HasColumnName("FirstName");
+                    p.Property(pp => pp.Last).HasColumnName("LastName");
+                }
+            );
             x.HasOne(p => p.FavoriteCourse).WithMany();
             x.HasMany(p => p.Enrollments)
                 .WithOne(p => p.Student)

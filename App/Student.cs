@@ -2,15 +2,16 @@
 
 public class Student : Entity
 {
-    public string Name { get; set; }
-    public Email Email { get; set; }
-    public virtual Course FavoriteCourse { get; set; }
-    public virtual IReadOnlyList<Enrollment> Enrollments => _enrollments.ToList();
+    public virtual Name Name { get; private set; }
+    public Email Email { get; private set; }
+    public virtual Course FavoriteCourse { get; private set; }
+
     private readonly List<Enrollment> _enrollments = new List<Enrollment>();
+    public virtual IReadOnlyList<Enrollment> Enrollments => _enrollments.ToList();
 
     protected Student() { }
 
-    public Student(string name, Email email, Course favoriteCourse, Grade favoriteCourseGrade)
+    public Student(Name name, Email email, Course favoriteCourse, Grade favoriteCourseGrade)
         : this()
     {
         Name = name;
@@ -39,5 +40,19 @@ public class Student : Entity
             return;
 
         _enrollments.Remove(enrollment);
+    }
+
+    public void EditPersonalInfo(Name name, Email email, Course favoriteCourse)
+    {
+        if (name == null)
+            throw new ArgumentNullException();
+        if (email == null)
+            throw new ArgumentNullException();
+        if (favoriteCourse == null)
+            throw new ArgumentNullException();
+
+        Name = name;
+        Email = email;
+        FavoriteCourse = favoriteCourse;
     }
 }
