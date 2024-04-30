@@ -3,7 +3,7 @@ using XResults;
 
 namespace App;
 
-public class Email 
+public class Email : ValueObject
 {
     public string Value { get; }
 
@@ -31,5 +31,10 @@ public class Email
     public static implicit operator string(Email email)
     {
         return email.Value;
+    }
+
+    protected override IEnumerable<object> GetPropertiesForComparison()
+    {
+        yield return Value;
     }
 }
