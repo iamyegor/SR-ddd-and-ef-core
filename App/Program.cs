@@ -1,11 +1,19 @@
-﻿using Microsoft.Extensions.Configuration;
-using App;
+﻿using App;
+using Microsoft.Extensions.Configuration;
 
-string connectionString = GetConnectionString();
+string result3 = Execute(x => x.DisenrollStudent(1, 2));
+string result = Execute(x => x.CheckStudentFavoriteCourse(1, 2));
+string result2 = Execute(x => x.EnrollStudent(1, 2, Grade.A));
 
-using (var context = new ApplicationContext(connectionString, true))
+string Execute(Func<StudentController, string> func)
 {
-    Student? student = context.Students.SingleOrDefault(x => x.Id == 1);
+    string connectionString = GetConnectionString();
+
+    using (var context = new SchoolContext(connectionString, true))
+    {
+        var controller = new StudentController(context);
+        return func(controller);
+    }
 }
 
 string GetConnectionString()
