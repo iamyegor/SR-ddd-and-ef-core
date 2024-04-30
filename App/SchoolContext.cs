@@ -55,8 +55,10 @@ public sealed class SchoolContext : DbContext
                 p => p.Name,
                 p =>
                 {
+                    p.Property<long>("name_suffix_id").HasColumnName("name_suffix_id");
                     p.Property(pp => pp.First).HasColumnName("FirstName");
                     p.Property(pp => pp.Last).HasColumnName("LastName");
+                    p.HasOne(pp => pp.Suffix).WithMany().HasForeignKey("name_suffix_id");
                 }
             );
             x.HasOne(p => p.FavoriteCourse).WithMany();
