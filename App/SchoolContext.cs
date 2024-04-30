@@ -49,6 +49,7 @@ public sealed class SchoolContext : DbContext
             x.HasOne(p => p.FavoriteCourse).WithMany();
             x.HasMany(p => p.Enrollments)
                 .WithOne(p => p.Student)
+                .OnDelete(DeleteBehavior.Cascade)
                 .Metadata.PrincipalToDependent?.SetPropertyAccessMode(PropertyAccessMode.Field);
         });
         modelBuilder.Entity<Course>(x =>
