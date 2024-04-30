@@ -44,7 +44,13 @@ public sealed class SchoolContext : DbContext
         {
             x.ToTable("Student").HasKey(k => k.Id);
             x.Property(p => p.Id).HasColumnName("StudentID");
-            x.Property(p => p.Email);
+            x.ComplexProperty(
+                p => p.Email,
+                emailBuilder =>
+                {
+                    emailBuilder.Property(e => e.Value).HasColumnName("email");
+                }
+            );
             x.Property(p => p.Name);
             x.HasOne(p => p.FavoriteCourse).WithMany();
             x.HasMany(p => p.Enrollments)
