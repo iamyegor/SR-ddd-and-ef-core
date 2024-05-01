@@ -3,6 +3,7 @@ namespace App;
 public abstract class Entity
 {
     public long Id { get; }
+    private readonly List<IDomainEvent> _domainEvents = [];
 
     protected Entity() { }
 
@@ -56,5 +57,18 @@ public abstract class Entity
     public override int GetHashCode()
     {
         return Id.GetHashCode();
+    }
+
+    protected void RaiseDomainEvent(IDomainEvent domainEvent)
+    {
+        _domainEvents.Add(domainEvent);
+    }
+
+    public IReadOnlyList<IDomainEvent> PopDomainEvents()
+    {
+        List<IDomainEvent> copy = _domainEvents.ToList();
+        _domainEvents.Clear();
+
+        return copy;
     }
 }

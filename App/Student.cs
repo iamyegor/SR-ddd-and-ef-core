@@ -51,6 +51,11 @@ public class Student : Entity
         if (favoriteCourse == null)
             throw new ArgumentNullException();
 
+        if (email != Email)
+        {
+            RaiseDomainEvent(new StudentEmailChangedEvent(Id, email));
+        }
+
         Name = name;
         Email = email;
         FavoriteCourse = favoriteCourse;
